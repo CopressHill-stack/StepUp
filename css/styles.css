@@ -97,6 +97,12 @@ main {
     background-color: #ff1a1a;
 }
 
+.goal.completed {
+    text-decoration: line-through;
+    color: gray;
+    pointer-events: none; /* Забороняє взаємодію */
+}
+
 .goal button {
     background-color: #e0e0e0;
     border: none;

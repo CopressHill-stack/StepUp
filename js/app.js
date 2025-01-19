@@ -1,10 +1,10 @@
 // Ініціалізація даних із localStorage
-let calendarData;
+let calendar;
 try {
-    calendarData = JSON.parse(localStorage.getItem("calendarData")) || {};
+    calendar = JSON.parse(localStorage.getItem("calendarData")) || {};
 } catch (error) {
     console.error("Помилка при парсингу даних з localStorage:", error);
-    calendarData = {};
+    calendar = {};
 }
 
 let selectedDate = new Date().toISOString().split('T')[0]; // Сьогоднішня дата
@@ -23,11 +23,11 @@ document.getElementById("datePicker").addEventListener("change", updateSelectedD
 function addCardToDate() {
     const cardName = prompt("Введіть назву картки:");
     if (cardName) {
-        if (!calendarData[selectedDate]) {
-            calendarData[selectedDate] = [];
+        if (!calendar[selectedDate]) {
+            calendar[selectedDate] = [];
         }
         const cardId = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-        calendarData[selectedDate].push({ id: cardId, name: cardName, goals: [] });
+        calendar[selectedDate].push({ id: cardId, name: cardName, goals: [] });
         saveCalendarData();
         renderCards();
     }
@@ -39,22 +39,34 @@ document.getElementById("addCardButton").addEventListener("click", addCardToDate
 function addGoalToCard(cardIndex) {
     const goalText = prompt("Введіть вашу ціль:");
     if (goalText) {
-        calendarData[selectedDate][cardIndex].goals.push(goalText);
+        calendar[selectedDate][cardIndex].goals.push({ text: goalText, completed: false});
         saveCalendarData();
         renderCards();
     }
 }
 
+// Позначення цілі як виконаної
+function completeGoal(cardIndex, goalIndex) {
+    const goal = calendar[selectedDate][cardIndex].goals[goalIndex];
+    goal.completed = true;
+
+    if(goal.completed){
+        calendar[selectedDate][cardIndex].goals.splice(goalIndex, 1);
+        calendar[selectedDate][cardIndex].goals.push(goal);
+    }
+    saveCalendarData();
+    renderCards();
+}
 // Видалення картки
 function deleteCard(cardIndex) {
-    calendarData[selectedDate].splice(cardIndex, 1);
+    calendar[selectedDate].splice(cardIndex, 1);
     saveCalendarData();
     renderCards();
 }
 
 // Збереження даних у localStorage
 function saveCalendarData() {
-    localStorage.setItem("calendarData", JSON.stringify(calendarData));
+    localStorage.setItem("calendarData", JSON.stringify(calendar));
 }
 
 function setupDragAndDrop() {
@@ -67,13 +79,6 @@ function setupDragAndDrop() {
         goal.addEventListener("dragstart", (e) => {
             e.dataTransfer.setData("goalIndex", e.target.dataset.goalIndex);
             e.dataTransfer.setData("fromCardIndex", e.target.dataset.cardIndex);
-
-            console.log(
-                "Drag Start - Goal Index:",
-                goal.dataset.goalIndex,
-                "From Card Index:",
-                goal.dataset.cardIndex
-            );
         });
     });
 
@@ -86,9 +91,9 @@ function setupDragAndDrop() {
         card.addEventListener("drop", (e) => {
             e.preventDefault();
 
-            const goalIndex = e.dataTransfer.getData("goalIndex");
-            const fromCardIndex = e.dataTransfer.getData("fromCardIndex");
-            const toCardIndex = card.dataset.cardIndex;
+            const goalIndex = parseInt(e.dataTransfer.getData("goalIndex"), 10);
+            const fromCardIndex = parseInt(e.dataTransfer.getData("fromCardIndex"), 10);
+            const toCardIndex = parseInt(card.dataset.cardIndex, 10);
 
             console.log(
                 "Drop - Goal Index:",
@@ -101,11 +106,11 @@ function setupDragAndDrop() {
 
             if (fromCardIndex !== toCardIndex) {
                 // Переміщуємо ціль між картками
-                const goal = calendarData[selectedDate][fromCardIndex].goals.splice(goalIndex, 1)[0];
-                calendarData[selectedDate][toCardIndex].goals.push(goal);
+                const goal = calendar[selectedDate][fromCardIndex].goals.splice(goalIndex, 1)[0];
+                calendar[selectedDate][toCardIndex].goals.push(goal);
 
                 saveCalendarData();
-                renderCards();
+                renderCards(selectedDate);
             }
         });
     });
@@ -115,7 +120,7 @@ function renderCards() {
     const container = document.getElementById("cardsContainer");
     container.innerHTML = "";
 
-    if (!calendarData[selectedDate] || calendarData[selectedDate].length === 0) {
+    if (!calendar[selectedDate] || calendar[selectedDate].length === 0) {
         const message = document.createElement("p");
         message.textContent = "Немає карток для вибраної дати.";
         message.classList.add("noCards");
@@ -130,7 +135,7 @@ function renderCards() {
     cardsContainer.style.gridAutoRows = "max-content";
     cardsContainer.style.gap = "1rem";
 
-    calendarData[selectedDate].forEach((card, cardIndex) => {
+    calendar[selectedDate].forEach((card, cardIndex) => {
         const cardDiv = document.createElement("div");
         cardDiv.classList.add("card");
         cardDiv.dataset.cardIndex = cardIndex;
@@ -147,20 +152,33 @@ function renderCards() {
         deleteCardButton.addEventListener("click", () => deleteCard(cardIndex));
         cardDiv.appendChild(deleteCardButton);
 
+        const sortedGoals = card.goals.slice().sort((a, b) => a.completed - b.completed);
+
         // Цілі в картці
-        card.goals.forEach((goal, goalIndex) => {
+        sortedGoals.forEach((goal, goalIndex) => {
             const goalDiv = document.createElement("div");
             goalDiv.classList.add("goal");
             goalDiv.dataset.goalIndex = goalIndex;
             goalDiv.dataset.cardIndex = cardIndex;
-
-            console.log(cardIndex);
+            if(goal.completed){
+                goalDiv.classList.add("completed");
+                goalDiv.draggable = false;
+            }else{
+                goalDiv.draggable = true;
+            }
 
             const goalText = document.createElement("span");
-            goalText.textContent = goal;
-
+            goalText.textContent = goal.text;
             goalDiv.appendChild(goalText);
             cardDiv.appendChild(goalDiv);
+            // Кнопка виконання цілі
+            if(!goal.completed){
+                const completeButton = document.createElement("button");
+                completeButton.textContent = "✔";
+                completeButton.classList.add("complete-goal");
+                completeButton.addEventListener("click", () => completeGoal(cardIndex, goalIndex));
+                goalDiv.appendChild(completeButton);     
+            }
         });
 
         // Кнопка додавання цілі
@@ -179,6 +197,7 @@ function renderCards() {
 
 // Ініціалізація
 renderCards();
+updateSelectedDate();
 
 const ctx = document.getElementById("progress-chart").getContext("2d");
     const progressChart = new Chart(ctx, {
