@@ -1,4 +1,4 @@
-// Ініціалізація даних із localStorage
+be// Ініціалізація даних із localStorage
 let calendar;
 try {
     calendar = JSON.parse(localStorage.getItem("calendarData")) || {};
@@ -196,23 +196,84 @@ renderCards();
 updateSelectedDate();
 
 const ctx = document.getElementById("progress-chart").getContext("2d");
-    const progressChart = new Chart(ctx, {
-        type: 'line',
+function getWeeklyStats(){
+    const today = new Date();
+    const lastWeek = [];
+    
+    for(let i = 6; i >= 0; i--){
+        const date = new Date();
+        date.setDate(today.getDate() - I);
+        lastWeek.push(date.toISOString().split("T")[0]);
+    }
+    
+    const stats = {
+        planned: Array(7).fill(0),
+        completed: Array(7).fill(0),
+    };
+    
+    lastWeek.forEach((date, index) => {
+        const taskForDate = task[date] || [];
+        stats.planned[index] = taskForDate.length;
+        stats.comleted[index] = taskForDate.filter((task) => task.completed).length;        
+    });
+    return { dates: lastWeek, stats };
+}
+
+function updateChart(){
+    const { dates, stats } = getWeeklyStats();
+    
+    new Chart(ctx, {
+        type: bar,
         data: {
-            labels: ['День 1', 'День 2', 'День 3', 'День 4', 'День 5', 'День 6', 'День 7'],
-            datasets: [{
-                label: 'Прогрес',
-                data: [20, 70, 10, 100, 50, 30, 60],
-                borderColor: '#4CAF50',
-                backgroundColor: '#4CAF50',
-                borderWidth: 1
-            }]
+            labels: dates,
+            datasets: [
+                {
+                    label: "Заплановані завдання",
+                     data: stats.planned,
+                     backgroundColor: green,
+                     borderColor: green,
+                     borderWidth: 1,
+                },
+                {
+                     label: "Виконані завдання",
+                      data: stats.completed,
+                      backgroundColor: green,
+                      borderColor: green;
+                      borderWidht: 1,
+                },
+            ],            
         },
         options: {
+            responsive: true,
+            plugins: {
+                legends: {
+                    position: "top",
+                },
+                title: {
+                    display: true,
+                    text: "Статистика завдань за останній тиждень",
+                },
+            },
             scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: "Дата",
+                    },
+                },
                 y: {
-                  beginAtZero: true
-                }
-            }
-        }
-    });
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: "Кількість завдань",
+                    },
+                },
+            },
+        },
+    });        
+}
+
+updateChart();
+
+
+
