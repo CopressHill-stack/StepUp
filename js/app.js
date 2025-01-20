@@ -202,7 +202,7 @@ const ctx = document.getElementById("progress-chart").getContext("2d");
             labels: ['День 1', 'День 2', 'День 3', 'День 4', 'День 5', 'День 6', 'День 7'],
             datasets: [{
                 label: 'Прогрес',
-                data: [20, 70, 10, 100],
+                data: [20, 70, 10, 100, 50, 30, 60],
                 borderColor: '#4CAF50',
                 backgroundColor: '#4CAF50',
                 borderWidth: 1
