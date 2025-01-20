@@ -199,10 +199,10 @@ const ctx = document.getElementById("progress-chart").getContext("2d");
     const progressChart = new Chart(ctx, {
         type: 'line',
         data: {
-            labels: ['День 1', 'День 2', 'День 3', 'Місяць 4', 'День 5', 'День 6', 'День 7'],
+            labels: ['День 1', 'День 2', 'День 3', 'День 4', 'День 5', 'День 6', 'День 7'],
             datasets: [{
                 label: 'Прогрес',
-                data: [10, 30, 50, 70],
+                data: [20, 70, 10, 100],
                 borderColor: '#4CAF50',
                 backgroundColor: '#4CAF50',
                 borderWidth: 1
