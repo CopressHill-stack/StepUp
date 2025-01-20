@@ -238,7 +238,7 @@ function updateChart(){
                      label: "Виконані завдання",
                       data: stats.completed,
                       backgroundColor: green,
-                      borderColor: green;
+                      borderColor: green,
                       borderWidht: 1,
                 },
             ],            
