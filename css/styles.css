@@ -162,6 +162,18 @@ main {
     cursor: grab;
 }
 
+@media (max-width: 480px){
+    .goal{
+        flex: 1 1 100%;
+        max-width: 100%;
+    }
+    .card{
+        flex-direction: column;
+    }
+    header h1{
+        display: none;
+    }
+}
 .goal span {
     font-size: 1rem;
     font-weight: 500;
