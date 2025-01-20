@@ -136,6 +136,7 @@ main {
     margin-top: 16px;
     display: flex;
     flex-direction: column;
+    flex-wrap: wrap;
     align-items: flex-start;
 }
 
@@ -153,6 +154,9 @@ main {
     margin-bottom: 8px;
     padding: 12px;
     display: flex;
+    flex: 1 1 calc(25% - 10px);
+    max-width: calc(25% - 10px);
+    min-width: 250px;
     justify-content: space-between;
     align-items: center;
     cursor: grab;
