@@ -115,19 +115,14 @@ main {
     background-color: #d6d6d6;
 }
 
-.cardsContainer {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(250px, 1fr));
-    /*grid-auto-rows: max-content;*/
-    gap: 1rem;
-    width: 100%;
-}
 .cards-container{
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     grid-auto-rows: max-content;
     gap: 1rem;
-    width: 100%;
+    width: 80%;
+    background-color: red;
+    margin: 0 10%;
 }
 .noCards{
     text-align: center;
