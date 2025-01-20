@@ -195,7 +195,7 @@ function renderCards() {
 renderCards();
 updateSelectedDate();
 
-const ctx = document.getElementById("progress-chart").getContext("2d");
+const ctx = document.getElementById("taskChart").getContext("2d");
 function getWeeklyStats(){
     const today = new Date();
     const lastWeek = [];
