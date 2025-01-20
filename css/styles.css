@@ -27,6 +27,7 @@ header h1{
     font-optical-sizing: auto;
     font-weight: weight;
     font-style: normal;
+    font-size: 2rem;
 }
 #calendarContainer {
     margin: 10px 0;
