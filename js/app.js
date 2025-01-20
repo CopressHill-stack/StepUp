@@ -117,7 +117,7 @@ function setupDragAndDrop() {
 }
 // Рендеринг карток із цілями
 function renderCards() {
-    const container = document.getElementById("cardsContainer");
+    const container = document.getElementById("boardsContainer");
     container.innerHTML = "";
 
     if (!calendar[selectedDate] || calendar[selectedDate].length === 0) {
