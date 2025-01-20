@@ -1,4 +1,4 @@
-be// Ініціалізація даних із localStorage
+// Ініціалізація даних із localStorage
 let calendar;
 try {
     calendar = JSON.parse(localStorage.getItem("calendarData")) || {};
@@ -33,7 +33,10 @@ function addCardToDate() {
     }
 }
 
-document.getElementById("addCardButton").addEventListener("click", addCardToDate);
+document.getElementById("addCardButton").addEventListener("click", () => {
+    addCardToDate();
+    updateChart();
+});
 
 // Додавання цілі в картку
 function addGoalToCard(cardIndex) {
@@ -42,6 +45,7 @@ function addGoalToCard(cardIndex) {
         calendar[selectedDate][cardIndex].goals.push({ text: goalText, completed: false});
         saveCalendarData();
         renderCards();
+        updateChart();
     }
 }
 
@@ -53,15 +57,18 @@ function completeGoal(cardIndex, goalIndex) {
     if(goal.completed){
         calendar[selectedDate][cardIndex].goals.splice(goalIndex, 1);
         calendar[selectedDate][cardIndex].goals.push(goal);
+
     }
     saveCalendarData();
     renderCards();
+    updateChart();
 }
 // Видалення картки
 function deleteCard(cardIndex) {
     calendar[selectedDate].splice(cardIndex, 1);
     saveCalendarData();
     renderCards();
+    updateChart();
 }
 
 // Збереження даних у localStorage
@@ -172,7 +179,10 @@ function renderCards() {
                 const completeButton = document.createElement("button");
                 completeButton.textContent = "✔";
                 completeButton.classList.add("complete-goal");
-                completeButton.addEventListener("click", () => completeGoal(cardIndex, goalIndex));
+                completeButton.addEventListener("click", () => {
+                    completeGoal(cardIndex, goalIndex);
+                    updateChart();
+                   });
                 goalDiv.appendChild(completeButton);     
             }
         });
@@ -195,50 +205,75 @@ function renderCards() {
 renderCards();
 updateSelectedDate();
 
-const ctx = document.getElementById("taskChart").getContext("2d");
-function getWeeklyStats(){
+
+function getLastWeekDates() {
+    const dates = [];
     const today = new Date();
-    const lastWeek = [];
-    
-    for(let i = 6; i >= 0; i--){
+
+    for (let i = 6; i >= 0; i--) {
         const date = new Date();
-        date.setDate(today.getDate() - I);
-        lastWeek.push(date.toISOString().split("T")[0]);
+        date.setDate(today.getDate() - i);
+        dates.push(date.toISOString().split('T')[0]);
     }
-    
-    const stats = {
-        planned: Array(7).fill(0),
-        completed: Array(7).fill(0),
-    };
-    
-    lastWeek.forEach((date, index) => {
-        const taskForDate = task[date] || [];
-        stats.planned[index] = taskForDate.length;
-        stats.comleted[index] = taskForDate.filter((task) => task.completed).length;        
-    });
-    return { dates: lastWeek, stats };
+
+    return dates;
 }
 
-function updateChart(){
-    const { dates, stats } = getWeeklyStats();
-    
-    new Chart(ctx, {
-        type: bar,
+// Функція для підрахунку виконаних і запланованих цілей за кожен день
+function getWeeklyStats() {
+    const dates = getLastWeekDates(); // Масив останніх 7 днів
+    const stats = dates.map((date) => {
+        let completedGoals = 0; // Лічильник виконаних цілей
+        let totalGoals = 0; // Лічильник загальної кількості цілей
+
+        // Перевіряємо цілі для кожної дати
+        if (calendar[date]) {
+            calendar[date].forEach((card) => {
+                totalGoals += card.goals.length; // Додаємо всі цілі
+                completedGoals += card.goals.filter(goal => goal.completed).length; // Фільтруємо виконані
+            });
+        }
+
+        return { date, completedGoals, totalGoals }; // Повертаємо дані для дати
+    });
+
+    return stats; // Повертаємо статистику за тиждень
+}
+
+// Функція для оновлення даних графіка
+function updateChartData(chart) {
+    const weeklyStats = getWeeklyStats(); // Отримуємо статистику за останній тиждень
+    const labels = weeklyStats.map(stat => stat.date); // Дати для підписів на графіку
+    const completedData = weeklyStats.map(stat => stat.completedGoals); // Дані виконаних цілей
+    const totalData = weeklyStats.map(stat => stat.totalGoals); // Дані загальної кількості цілей
+
+    chart.data.labels = labels; // Оновлюємо підписи
+    chart.data.datasets[0].data = totalData; // Дані для "Запланованих цілей"
+    chart.data.datasets[1].data = completedData; // Дані для "Виконаних цілей"
+
+    chart.update(); // Оновлюємо графік
+}
+
+
+
+const ctx = document.getElementById("taskChart").getContext("2d");
+const progressChart =  new Chart(ctx, {
+        type: "bar",
         data: {
-            labels: dates,
+            labels: [],
             datasets: [
                 {
                     label: "Заплановані завдання",
-                     data: stats.planned,
-                     backgroundColor: green,
-                     borderColor: green,
+                     data: [],
+                     backgroundColor: "rgba(75, 192, 192, 0.6)",
+                     borderColor: "rgba(75, 192, 192, 1)",
                      borderWidth: 1,
                 },
                 {
                      label: "Виконані завдання",
-                      data: stats.completed,
-                      backgroundColor: green,
-                      borderColor: green,
+                      data: [],
+                      backgroundColor: "rgba(153, 102, 255, 0.6)",
+                      borderColor: "rgba(153, 102, 255, 1)",
                       borderWidht: 1,
                 },
             ],            
@@ -263,6 +298,9 @@ function updateChart(){
                 },
                 y: {
                     beginAtZero: true,
+                    ticks: {
+                        stepSize: 1,
+                    },
                     title: {
                         display: true,
                         text: "Кількість завдань",
@@ -271,9 +309,10 @@ function updateChart(){
             },
         },
     });        
+
+function updateChart() {
+    updateChartData(progressChart); // Оновлюємо дані графіка
 }
 
+
 updateChart();
-
-
-
