@@ -158,7 +158,6 @@ main {
 
 @media (max-width: 480px){
     .goal{
-        flex: 1 1 100%;
         max-width: 100%;
     }
     header h1{
