@@ -131,7 +131,7 @@ function renderCards() {
     const cardsContainer = document.createElement("div");
     cardsContainer.classList.add("cards-container");
     cardsContainer.style.display = "grid";
-    cardsContainer.style.gridTemplateColumns = "repeat(4, minmax(250px, 1fr))";
+    cardsContainer.style.gridTemplateColumns = "repeat(auto-fill, minmax(250px, 1fr))";
     cardsContainer.style.gridAutoRows = "max-content";
     cardsContainer.style.gap = "1rem";
 
