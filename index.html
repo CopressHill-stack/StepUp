@@ -6,16 +6,20 @@
     <meta name="description" content="StepUp - сайт для відстеження прогресу цілей.">
     <title>StepUp - Відстеження Цілей</title>
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 </head>
-<body>
+<body id="body">
     <header>
         <h1>StepUp: Управління завданнями</h1>
         <div id="boardControls">
           <input type="date" id="datePicker" />
           <button id="addCardButton">Додати картку</button>
+        </div>
+        <div>
+          <button class="theme-toggle">Toggle Dark Theme</button>
         </div>
     </header>
     

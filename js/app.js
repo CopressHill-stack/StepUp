@@ -19,6 +19,9 @@ function updateSelectedDate() {
 
 document.getElementById("datePicker").addEventListener("change", updateSelectedDate);
 
+
+
+
 // Додавання нової картки
 function addCardToDate() {
     const cardName = prompt("Введіть назву картки:");
@@ -43,6 +46,7 @@ function addGoalToCard(cardIndex) {
     const goalText = prompt("Введіть вашу ціль:");
     if (goalText) {
         calendar[selectedDate][cardIndex].goals.push({ text: goalText, completed: false});
+
         saveCalendarData();
         renderCards();
         updateChart();
@@ -76,6 +80,22 @@ function saveCalendarData() {
     localStorage.setItem("calendarData", JSON.stringify(calendar));
 }
 
+function darkMode(){
+    const body = document.getElementById("body");
+    const themeToggle = document.querySelector('.theme-toggle');
+   
+    if(localStorage.getItem('theme') === 'dark'){
+        document.body.classList.add('dark');
+        console.log('dark');
+    }else{
+        console.log('light');
+    }
+    themeToggle.addEventListener('click', () => {
+        document.body.classList.toggle('dark');
+        localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+        console.log(localStorage.getItem('theme'));
+    });
+}
 function setupDragAndDrop() {
     const goals = document.querySelectorAll(".goal");
     const cards = document.querySelectorAll(".card");
@@ -142,7 +162,6 @@ function renderCards() {
         const cardDiv = document.createElement("div");
         cardDiv.classList.add("card");
         cardDiv.dataset.cardIndex = cardIndex;
-
         // Назва картки
         const cardTitle = document.createElement("h4");
         cardTitle.textContent = card.name;
@@ -157,12 +176,19 @@ function renderCards() {
 
         const sortedGoals = card.goals.slice().sort((a, b) => a.completed - b.completed);
 
+         // Кнопка додавання цілі
+        const addGoalButton = document.createElement("button");
+        addGoalButton.textContent = "Додати ціль";
+        addGoalButton.classList.add("add-goal");
+        addGoalButton.addEventListener("click", () => addGoalToCard(cardIndex));
+
         // Цілі в картці
         sortedGoals.forEach((goal, goalIndex) => {
             const goalDiv = document.createElement("div");
             goalDiv.classList.add("goal");
             goalDiv.dataset.goalIndex = goalIndex;
             goalDiv.dataset.cardIndex = cardIndex;
+            goalDiv.className = 'goal animate__animated animate__fadeUnDown';
             if(goal.completed){
                 goalDiv.classList.add("completed");
                 goalDiv.draggable = false;
@@ -183,15 +209,18 @@ function renderCards() {
                     completeGoal(cardIndex, goalIndex);
                     updateChart();
                    });
-                goalDiv.appendChild(completeButton);     
+                goalDiv.appendChild(completeButton);    
+            }
+            if(!goal.completed){
+                const remindButton = document.createElement('button');
+                remindButton.textContent = 'Нагадати';
+                remindButton.addEventListener('click', () => {
+                    sendNotification(goalText);
+                });
+                goalDiv.appendChild(remindButton); 
             }
         });
 
-        // Кнопка додавання цілі
-        const addGoalButton = document.createElement("button");
-        addGoalButton.textContent = "Додати ціль";
-        addGoalButton.classList.add("add-goal");
-        addGoalButton.addEventListener("click", () => addGoalToCard(cardIndex));
 
         cardDiv.appendChild(addGoalButton);
         cardsContainer.appendChild(cardDiv);
@@ -204,6 +233,7 @@ function renderCards() {
 // Ініціалізація
 renderCards();
 updateSelectedDate();
+darkMode();
 
 
 function getLastWeekDates() {
@@ -217,6 +247,20 @@ function getLastWeekDates() {
     }
 
     return dates;
+}
+
+function sendNotification(taskName){
+    if(Notification.permission === 'granted'){
+        new Notification('Reminder', {
+            body: 'Не забудь виконати свої завдання: ${taskName}',
+        });
+    }else if(Notification.permission !== 'denied'){
+        Notification.requestPermission().then(permission => {
+            if(permission === 'granted'){
+                sendNotification(taskName);
+            }
+        });
+    }
 }
 
 // Функція для підрахунку виконаних і запланованих цілей за кожен день
