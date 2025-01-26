@@ -81,21 +81,26 @@ function saveCalendarData() {
 }
 
 function darkMode(){
-    const body = document.getElementById("body");
-    const themeToggle = document.querySelector('.theme-toggle');
-   
-    if(localStorage.getItem('theme') === 'dark'){
-        document.body.classList.add('dark');
-        console.log('dark');
-    }else{
-        console.log('light');
-    }
-    themeToggle.addEventListener('click', () => {
-        document.body.classList.toggle('dark');
-        localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
-        console.log(localStorage.getItem('theme'));
+    const themeToggle = document.getElementById("themeToggle");
+    
+    document.addEventListener("DOMContentLoader", () => {
+        const savedTheme = localStorage.getItem("theme");
+        if (savedTheme === "dark"){
+            document.body.classList.add("dark-theme");
+            themeToggle.checked = "true";
+        }
+    });
+    themeToggle.addEventListener("change", () => {
+        if(savedTheme === "dark"){
+            document.body.classList.add("dark-theme");
+            localStorage.setItem("theme", "dark");
+        }else{
+            document.body.classList.remove("dark-theme");
+            localStorage.setItem("theme", "light");  
+        }
     });
 }
+
 function setupDragAndDrop() {
     const goals = document.querySelectorAll(".goal");
     const cards = document.querySelectorAll(".card");
