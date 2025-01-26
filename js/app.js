@@ -204,9 +204,9 @@ function renderCards() {
             goalText.textContent = goal.text;
             goalDiv.appendChild(goalText);
             cardDiv.appendChild(goalDiv);
-            const completeDiv = document.createElement("div");
             // Кнопка виконання цілі
             if(!goal.completed){
+                const completeDiv = document.createElement("div");
                 completeDiv.classList.add("complete-div");
                 const completeButton = document.createElement("button");
                 completeButton.textContent = "✔";
