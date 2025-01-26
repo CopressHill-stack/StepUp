@@ -252,34 +252,34 @@ canvas {
 }
 
 /* Темна тема */
-body.dark{
+body.dark-theme{
     background-color: #131313;
 }
-body.dark .card{
+body.dark-theme .card{
     background-color: #1E1E1E;
     color: #E0E0E0;
 }
-body.dark .card .completed{
+body.dark-theme .card .completed{
     background-color: #A5D6A7;
     color: #131313 ;
 }
-body.dark .goal{
+body.dark-theme .goal{
     background-color: #131313;
 }
 
-body.dark button{
+body.dark-theme button{
     background-color: #4CAF50;
 }
 
-body.dark button:hover{
+body.dark-theme button:hover{
     background-color: #81C784;
 }
 
-body.dark .delete-card{
+body.dark-theme .delete-card{
      background-color: #ff4d4d;
 }
 
-body.dark .delete-card:hover{
+body.dark-theme .delete-card:hover{
      background-color: #ff1a1a;
 }
 
