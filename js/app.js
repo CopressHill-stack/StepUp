@@ -91,14 +91,16 @@ function darkMode(){
         if(savedTheme === "dark"){
             document.body.classList.add("dark-theme");
             localStorage.setItem("theme", "dark");
+            console.log("dark");
         }else{
             document.body.classList.remove("dark-theme");
             localStorage.setItem("theme", "light");  
+            console.log("light");
         }
     });
 }
 
-function setupDragAndDrop() {
+I'm function setupDragAndDrop() {
     const goals = document.querySelectorAll(".goal");
     const cards = document.querySelectorAll(".card");
 
