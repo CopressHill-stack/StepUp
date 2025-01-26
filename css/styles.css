@@ -247,10 +247,10 @@ canvas {
 
 /* Темна тема */
 body.dark-theme{
-    background-color: #131313;
+    background-color: #1f1f1f;
 }
 body.dark-theme .card{
-    background-color: #1E1E1E;
+    background-color: #131313;
     color: #E0E0E0;
 }
 body.dark-theme .card .completed{
@@ -258,7 +258,7 @@ body.dark-theme .card .completed{
     color: #131313 ;
 }
 body.dark-theme .goal{
-    background-color: #131313;
+    background-color: #1e1e1e;
 }
 
 body.dark-theme button{
