@@ -215,8 +215,8 @@ function renderCards() {
                     completeGoal(cardIndex, goalIndex);
                     updateChart();
                    });
-                goalDiv.appendChild(completeDiv);
-                completeDiv.appendChild(completeButton);    
+                completeDiv.appendChild(completeButton);
+                goalDiv.appendChild(completeDiv);    
             }
             if(!goal.completed){
                 const remindButton = document.createElement('button');
