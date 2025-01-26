@@ -82,14 +82,11 @@ function saveCalendarData() {
 
 function darkMode(){
     const themeToggle = document.getElementById("themeToggle");
-    
-    document.addEventListener("DOMContentLoader", () => {
-        const savedTheme = localStorage.getItem("theme");
-        if (savedTheme === "dark"){
-            document.body.classList.add("dark-theme");
-            themeToggle.checked = "true";
-        }
-    });
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme === "dark"){
+        document.body.classList.add("dark-theme");
+        themeToggle.checked = "true";
+    }
     themeToggle.addEventListener("change", () => {
         if(savedTheme === "dark"){
             document.body.classList.add("dark-theme");
@@ -98,8 +95,7 @@ function darkMode(){
             document.body.classList.remove("dark-theme");
             localStorage.setItem("theme", "light");  
         }
-    });
-}
+});
 
 function setupDragAndDrop() {
     const goals = document.querySelectorAll(".goal");
