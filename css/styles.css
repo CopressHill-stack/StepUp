@@ -190,6 +190,12 @@ main {
     transition: background-color 0.3s, color 0.3s;
 }
 
+.goal .complete-div{
+    display: flex;
+    justify-content: end;
+    max-width: 250px;
+}
+
 .goal.completed {
     text-decoration: line-through;
     color: gray;
