@@ -199,11 +199,12 @@ function renderCards() {
             }else{
                 goalDiv.draggable = true;
             }
-
+           
             const goalText = document.createElement("span");
             goalText.textContent = goal.text;
             goalDiv.appendChild(goalText);
             cardDiv.appendChild(goalDiv);
+            const completeDiv = document.createElement("div");
             // Кнопка виконання цілі
             if(!goal.completed){
                 const completeDiv = document.createElement("div");
