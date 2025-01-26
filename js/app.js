@@ -95,7 +95,8 @@ function darkMode(){
             document.body.classList.remove("dark-theme");
             localStorage.setItem("theme", "light");  
         }
-});
+    });
+}
 
 function setupDragAndDrop() {
     const goals = document.querySelectorAll(".goal");
