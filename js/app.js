@@ -100,7 +100,7 @@ function darkMode(){
     });
 }
 
-I'm function setupDragAndDrop() {
+function setupDragAndDrop() {
     const goals = document.querySelectorAll(".goal");
     const cards = document.querySelectorAll(".card");
 
