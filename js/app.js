@@ -206,6 +206,8 @@ function renderCards() {
             cardDiv.appendChild(goalDiv);
             // Кнопка виконання цілі
             if(!goal.completed){
+                const completeDiv = document.createElement("div");
+                completeDiv.classList.add("complete-div");
                 const completeButton = document.createElement("button");
                 completeButton.textContent = "✔";
                 completeButton.classList.add("complete-goal");
@@ -213,7 +215,8 @@ function renderCards() {
                     completeGoal(cardIndex, goalIndex);
                     updateChart();
                    });
-                goalDiv.appendChild(completeButton);    
+                goalDiv.appendChild(completeDiv);
+                completeDiv.appendChild(completeButton);    
             }
             if(!goal.completed){
                 const remindButton = document.createElement('button');
@@ -221,7 +224,7 @@ function renderCards() {
                 remindButton.addEventListener('click', () => {
                     sendNotification(goalText);
                 });
-                goalDiv.appendChild(remindButton); 
+                completeDiv.appendChild(remindButton); 
             }
         });
 
