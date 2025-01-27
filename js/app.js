@@ -283,7 +283,7 @@ function getLastWeekDates() {
 function sendNotification(taskName){
     if(Notification.permission === 'granted'){
         new Notification('Reminder', {
-            body: 'Не забудь виконати свої завдання: ${taskName}',
+            body: 'Не забудь виконати свої завдання: ' + taskName,
         });
     }else if(Notification.permission !== 'denied'){
         Notification.requestPermission().then(permission => {
