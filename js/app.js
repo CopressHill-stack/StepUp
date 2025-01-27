@@ -19,6 +19,9 @@ function updateSelectedDate() {
 
 document.getElementById("datePicker").addEventListener("change", updateSelectedDate);
 
+//*****     ФУНКЦІЯ БУРГЕР-МЕНЮ     *****//
+
+
 function burgerMenu(){
     const burgerButton = document.querySelector('.burger');
     const nav = document.querySelector('.nav');
@@ -32,7 +35,7 @@ function burgerMenu(){
     // Функція для відкриття/закриття меню
     burgerButton.addEventListener('click', () => {
         progressBar.style.display = "block";
-        progressBar.style.width = '100%';
+        progressBar.style.width = '80%';
         nav.appendChild(progressBar);
         nav.classList.toggle('open'); // Додаємо/видаляємо клас "open"
         burgerButton.classList.toggle('active'); // Змінюємо вигляд бургер-кнопки
@@ -47,7 +50,9 @@ function burgerMenu(){
     });
 }
 
-// Додавання нової картки
+//*****     ФУНКЦІЯ ДОДАВАННЯ НОВОЇ КАРТКИ     *****//
+
+
 function addCardToDate() {
     const cardName = prompt("Введіть назву картки:");
     if (cardName) {
@@ -66,7 +71,9 @@ function addCardToDate() {
         updateChart();
 });
 
-// Додавання цілі в картку
+//*****     ФУНКЦІЯ ДОДАВАННЯ ЦІЛІ В КАРТКУ     *****//
+
+
 function addGoalToCard(cardIndex) {
     const goalText = prompt("Введіть вашу ціль:");
     if (goalText) {
@@ -78,7 +85,9 @@ function addGoalToCard(cardIndex) {
     }
 }
 
-// Позначення цілі як виконаної
+//*****     ФУНКЦІЯ ПОЗНАЧЕННЯ ЦІЛІ ЯК ВИКОНАНОЇ     *****//
+
+
 function completeGoal(cardIndex, goalIndex) {
     const goal = calendar[selectedDate][cardIndex].goals[goalIndex];
     goal.completed = true;
@@ -92,7 +101,9 @@ function completeGoal(cardIndex, goalIndex) {
     renderCards();
     updateChart();
 }
-// Видалення картки
+//*****     ФУНКЦІЯ ВИДАЛЕННЯ КАРТКИ     *****//
+
+
 function deleteCard(cardIndex) {
     calendar[selectedDate].splice(cardIndex, 1);
     saveCalendarData();
@@ -100,10 +111,15 @@ function deleteCard(cardIndex) {
     updateChart();
 }
 
-// Збереження даних у localStorage
+//*****     ФУНКЦІЯ ЗБЕРЕЖЕННЯ ДАНИХ В LOCALSTORAGE     *****//
+
+
 function saveCalendarData() {
     localStorage.setItem("calendarData", JSON.stringify(calendar));
 }
+
+//*****     ФУНКЦІЯ ТЕМНА ТЕМА     *****//
+
 
 function darkMode(){
     const themeToggle = document.getElementById("themeToggle");
@@ -124,6 +140,9 @@ function darkMode(){
         }
     });
 }
+
+//*****     ФУНКЦІЯ ПЕРЕТЯГУВАННЯ ЦІЛЕЙ МІЖ КАРТКАМИ     *****//
+
 
 function setupDragAndDrop() {
     const goals = document.querySelectorAll(".goal");
@@ -151,15 +170,6 @@ function setupDragAndDrop() {
             const fromCardIndex = parseInt(e.dataTransfer.getData("fromCardIndex"), 10);
             const toCardIndex = parseInt(card.dataset.cardIndex, 10);
 
-            console.log(
-                "Drop - Goal Index:",
-                goalIndex,
-                "From Card Index:",
-                fromCardIndex,
-                "To Card Index:",
-                toCardIndex
-            );
-
             if (fromCardIndex !== toCardIndex) {
                 // Переміщуємо ціль між картками
                 const goal = calendar[selectedDate][fromCardIndex].goals.splice(goalIndex, 1)[0];
@@ -171,7 +181,10 @@ function setupDragAndDrop() {
         });
     });
 }
-// Рендеринг карток із цілями
+
+//*****     ФУНКЦІЯ РЕНДЕРИНГУ КАРТОК З ЦІЛЯМИ     *****//
+
+
 function renderCards() {
     const container = document.getElementById("boardsContainer");
     container.innerHTML = "";
@@ -242,12 +255,23 @@ function renderCards() {
                    });
                 completeDiv.appendChild(completeButton);
                 goalDiv.appendChild(completeDiv);    
-                const remindButton = document.createElement('button');
-                remindButton.textContent = 'Нагадати';
-                remindButton.addEventListener('click', () => {
-                    sendNotification(goal.text);
-                });
-                completeDiv.appendChild(remindButton); 
+                if(!("Notification" in window)) {
+                    alert("Ваш браузер не підтримує сповіщення.");
+                }else if(Notification.permission !== "granted") {
+                    // Запитати дозвіл на відправку повідомлень
+                    Notification.requestPermission().then((permission) => {
+                        if (permission !== "granted") {
+                            alert("Сповіщення вимкнено.");
+                        }
+                    });
+                }else if(Notification.permission === 'granted'){
+                    const remindButton = document.createElement('button');
+                    remindButton.textContent = 'Нагадати';
+                    remindButton.addEventListener('click', () => {
+                        setInterval(() => {sendNotification(goalText);}, 60 * 60 * 1000); // 60 хвилин
+                    });
+                    completeDiv.appendChild(remindButton); 
+                }
             }
         });
 
@@ -260,11 +284,7 @@ function renderCards() {
     setupDragAndDrop();
 }
 
-// Ініціалізація
-renderCards();
-updateSelectedDate();
-darkMode();
-burgerMenu();
+//*****     ФУНКЦІЯ ОТРИМАННЯ ДАТ ОСТАННІХ 7 ДНІВ     *****//
 
 
 function getLastWeekDates() {
@@ -280,10 +300,13 @@ function getLastWeekDates() {
     return dates;
 }
 
+//*****     ФУНКЦІЯ ВІДПРАВКИ НАГАДУВАНЬ     *****//
+
+
 function sendNotification(taskName){
     if(Notification.permission === 'granted'){
-        new Notification('Нагадую тобі', {
-            body: 'Не забудь виконати своє завдання: ' + taskName,
+        new Notification('Reminder', {
+            body: 'Не забудь виконати свої завдання:' + taskName,
             icon: "https://copresshill-stack.github.io/StepUp/img/icon32.png",
         });
     }else if(Notification.permission !== 'denied'){
@@ -295,7 +318,9 @@ function sendNotification(taskName){
     }
 }
 
-// Функція для підрахунку виконаних і запланованих цілей за кожен день
+//*****     ФУНКЦІЯ ДЛЯ ПІДРАХУНКУ ВИКОНАНИХ І ЗАПЛАНОВАНИХ ЦІЛЕЙ ЗА КОЖЕН ДЕНЬ     *****//
+
+
 function getWeeklyStats() {
     const dates = getLastWeekDates(); // Масив останніх 7 днів
     const stats = dates.map((date) => {
@@ -316,7 +341,9 @@ function getWeeklyStats() {
     return stats; // Повертаємо статистику за тиждень
 }
 
-// Функція для оновлення даних графіка
+//*****     ФУНКЦІЯ ДЛЯ ОНОВЛЕННЯ ЦІЛЕЙ В ГРАФІКУ     *****//
+
+
 function updateChartData(chart) {
     const weeklyStats = getWeeklyStats(); // Отримуємо статистику за останній тиждень
     const labels = weeklyStats.map(stat => stat.date); // Дати для підписів на графіку
@@ -330,6 +357,7 @@ function updateChartData(chart) {
     chart.update(); // Оновлюємо графік
 }
 
+//*****     ПОКАЗ І НАЛАШТУВАННЯ ГРАФІКУ     *****//
 
 
 const ctx = document.getElementById("taskChart").getContext("2d");
@@ -367,6 +395,13 @@ const progressChart =  new Chart(ctx, {
             },
             scales: {
                 x: {
+                    type: "category", // Використовується тип "time"
+                    ticks: {
+                    callback: function (value, index, values) {
+                        const date = new Date(this.getLabelForValue(value));
+                        return date.toLocaleDateString("uk-UA", { day: "2-digit", month: "short" }); // Відображає день і місяць
+                        }
+                    },
                     title: {
                         display: true,
                         text: "Дата",
@@ -386,9 +421,16 @@ const progressChart =  new Chart(ctx, {
         },
     });        
 
+//*****     ФУНКЦІЯ ОНОВЛЕННЯ ГРАФІКУ     *****//
+
+
 function updateChart() {
     updateChartData(progressChart); // Оновлюємо дані графіка
 }
 
-
+//*****     ІНІЦІАЛІЗАЦІЯ ФУНКЦІЙ     *****//
+renderCards();
+updateSelectedDate();
+darkMode();
+burgerMenu();
 updateChart();

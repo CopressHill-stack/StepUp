@@ -267,8 +267,9 @@ main {
 
 .goal.completed {
     text-decoration: line-through;
-    color: gray;
-    background-color: #d6d7df;
+    color: black;
+    background-color: var(--primary-accent);
+    opacity: 0.4;
     pointer-events: none; /* Забороняє взаємодію */
 }
 
@@ -317,7 +318,7 @@ button.add-goal:hover {
 
 /* Графік прогресу */
 #progress-section {
-    width: 100%;
+    width: 80%;
     max-width: 600px;
     margin: 20px auto;
 }
@@ -349,7 +350,7 @@ body.dark-theme .card{
 
 body.dark-theme .card .completed{
     background-color: var(--border-color);
-    color: var(--bg-color) ;
+    color: black;
 }
 
 body.dark-theme .goal{
@@ -375,7 +376,7 @@ body.dark-theme .delete-card:hover{
 }
 
 /* Медіа запити */
-@media (max-width: 480px){
+@media (max-width: 600px){
     header{
         padding: 0 3rem;
     }
@@ -401,7 +402,7 @@ body.dark-theme .delete-card:hover{
     .nav{
         position: absolute;
         display: none;
-        top: 100px;
+        top: 80px;
         right: 0;
         width: 100%;
         height: calc(100% - 100px);
@@ -422,8 +423,19 @@ body.dark-theme .delete-card:hover{
         display: flex;
     }
 
-    .burger.active{
-        background-color: var(--error-color);
+    .theme-toggle{
+        margin-left: 0;
+        margin-top: 30px;
+    }
+
+    .theme-toggle-container:before{
+        content: "Dark mode";
+        position: relative;
+        top: 35px;
+        left: -20px;
+        color: var(--text-color);
+        font-size: 1rem;
+        font-weight: bold;
     }
 
     .burger.active .burger-line:nth-child(1){
