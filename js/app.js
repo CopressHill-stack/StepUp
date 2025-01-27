@@ -254,9 +254,10 @@ function renderCards() {
                     updateChart();
                    });
                 completeDiv.appendChild(completeButton);
-                goalDiv.appendChild(completeDiv);    
-                if(!("Notification" in window)) {
+                goalDiv.appendChild(completeDiv);
+                if(!("Notification" in window) && localStorage.getItem('notification')) {
                     alert("Ваш браузер не підтримує сповіщення.");
+                    localStorage.setItem("notification", true);
                 }else if(Notification.permission !== "granted") {
                     // Запитати дозвіл на відправку повідомлень
                     Notification.requestPermission().then((permission) => {
