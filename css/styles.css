@@ -1,9 +1,41 @@
-no/***   ІМПОРТ ШРИФТІВ   ***/
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+/***   ІМПОРТ ШРИФТІВ   ***/
+@import url('https://fonts.googleapis.com/css2?family=Lexend+Giga:wght@100..900&display=swap');
+
+:root {
+  --bg-color: #FFFFFF;
+  --text-color: #1A1A1A;
+  --header-color: #F9F9F9;
+  --primary-accent: #4CAF50;
+  --primary-accent-hover: #6CCF70;
+  --secondary-accent: #1976D2;
+  --secondary-accent-hover: #3986F2;
+  --card-bg: #FFFFFF;
+  --border-color: #E0E0E0;
+  --error-color: #F44336;
+  --warning-color: #FF9800;
+}
+
+/* Темна тема */
+body.dark-theme {
+  --bg-color: #121212;
+  --text-color: #E0E0E0;
+  --header-color: #1E1E1E;
+  --primary-accent: #81C784;
+  --secondary-accent: #64B5F6;
+  --card-bg: #1E1E1E;
+  --border-color: #333333;
+  --error-color: #EF5350;
+  --warning-color: #FFA726;
+}
+
+html{
+    margin: 0;
+    padding: 0;
+}
 
 body {
     font-family: Arial, sans-serif;
-    background-color: #f9f9f9;
+    background-color: var(--bg-color);
     margin: 0;
     padding: 0;
     display: flex;
@@ -15,23 +47,31 @@ body {
 
 header {
     width: 100%;
-    background-color: #4CAF50;
-    color: white;
-    padding: 0.6rem 7rem;
+    background-color: var(--header-color);
+    color: var(--text-color);
+    border-bottom: 1px solid var(--border-color);
+    padding: 1rem 5rem;
     box-sizing: border-box;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+}
+
+.nav {
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+    align-items: center;
+    width: 100%;
 }
 
 header h1{
-    font-family: "Playfair Display", serif;
-    font-optical-sizing: auto;
-    font-weight: weight;
+    font-family: "Lexend Giga", serif;
+    color: var(--primary-accent);
     font-style: normal;
-    font-size: 2rem;
+    font-size: 2.5rem;
 }
 
 #calendarContainer {
@@ -40,14 +80,14 @@ header h1{
 }
 
 #boardControls {
-    margin-top: 1rem;
+    margin-top: 0.1rem;
     display: flex;
     gap: 1rem;
 }
 
 button {
-    background-color: #4CAF50;
-    color: white;
+    background-color: var(--secondary-accent);
+    color: var(--bg-color);
     border: none;
     padding: 0.5rem 1rem;
     border-radius: 5px;
@@ -56,8 +96,35 @@ button {
 }
 
 button:hover {
-    background-color: #45a049;
+    background-color: var(--secondary-accent-hover);
 }
+
+
+.burger {
+    display: none;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 25px;
+    height: 20px;
+    background: none;
+    padding:  5px;
+    box-sizing: content-box;
+    border: none;
+    cursor: pointer;
+}
+
+.burger:hover{
+        background-color: rgba(0, 0, 0, 0);
+    }
+
+.burger-line {
+    width: 100%;
+    height: 4px;
+    background-color: var(--text-color);
+    border-radius: 2px;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
 
 .theme-toggle-container{
     display: flex;
@@ -71,6 +138,7 @@ button:hover {
     display: inline-block;
     width: 60px;
     height: 30px;
+    margin-left: 2rem;
 }
 
 .theme-toggle input{
@@ -86,7 +154,7 @@ button:hover {
     bottom: 0;
     left: 0;
     right: 0;
-    background-color: #ccc;
+    background-color: #c9c9c9;
     transition: 0.4s;
     border-radius: 30px;
 }
@@ -98,13 +166,13 @@ button:hover {
     width: 22px;
     left: 4px;
     bottom: 4px;
-    background-color: white;
+    background-color: var(--bg-color);
     transition: 0.4s;
     border-radius: 50%;
 }
 
 input:checked + .slider{
-    background-color: #1e1e1e;
+    background-color: #c9c9c9;
 }
 
 input:checked + .slider:before{
@@ -136,7 +204,8 @@ main {
 
 .card {
     position: relative;
-    background-color: #f3f3f3;
+    background-color: var(--card-bg);
+    border: 2px solid var(--border-color);
     border-radius: 16px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.06);
     padding: 16px;
@@ -145,7 +214,7 @@ main {
     grid-template-column: 1;
     grid-auto-row: max-content;
     align-items: flex-start;
-    transition: background-color 0.3s, color 0.3s;
+    transition: background-color 0.3s, color 0.1s;
 }
 
 .card h4 {
@@ -157,11 +226,10 @@ main {
     position: absolute;
     top: 10px;
     right: 10px;
-    background-color: #ff4d4d;
+    background-color: var(--error-color);
     border: none;
-    color: white;
+    color: var(--bg-color);
     font-size: 1rem;
-    border-radius: 50%;
     width: 30px;
     height: 30px;
     cursor: pointer;
@@ -171,15 +239,16 @@ main {
 }
 
 .delete-card:hover {
-    background-color: #ff1a1a;
+    background-color: var(--warning-color);
 }
 
 .goal {
     width: 100%;
     box-sizing: border-box;
-    background-color: #e6f7ff;
+    background-color: var(--bg-color);
     border-radius: 12px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: 0.5px solid var(--border-color);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
     margin-bottom: 8px;
     padding: 12px;
     display: flex;
@@ -187,7 +256,7 @@ main {
     justify-content: space-between;
     align-items: center;
     cursor: grab;
-    transition: background-color 0.3s, color 0.3s;
+    transition: background-color 0.3s, color 0.1s;
 }
 
 .goal .complete-div{
@@ -212,22 +281,28 @@ main {
 }
 
 .goal button {
-    background-color: #e0e0e0;
+    background-color: var(--primary-accent);
+    color: var(--bg-color);
+    padding: 5px 10px;
+    cursor: pointer;
     border: none;
-    padding: 0.2rem 0.5rem;
     border-radius: 5px;
     cursor: pointer;
 }
 
+.goal button:first-child {
+    margin-right: 0.4rem;
+}
+
 .goal button:hover {
-    background-color: #d6d6d6;
+    background-color: var(--primary-accent-hover);
 }
 
 button.add-goal {
-    background-color: #36cfc9;
-    color: white;
+    background-color: var(--secondary-accent);
+    color: var(--bg-color);
     border: none;
-    padding: 8px 16px;
+    padding: 10px 20px;
     border-radius: 8px;
     cursor: pointer;
     font-size: 0.9rem;
@@ -237,7 +312,7 @@ button.add-goal {
 }
 
 button.add-goal:hover {
-    background-color: #13c2c2;
+    background-color: var(--secondary-accent-hover);
 }
 
 /* Графік прогресу */
@@ -247,49 +322,120 @@ button.add-goal:hover {
     margin: 20px auto;
 }
 
+#progress-section h2{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 canvas {
     max-width: 100%;
 }
 
 /* Темна тема */
 body.dark-theme{
-    background-color: #2e2e2e;
+    background-color: var(--bg-color);
+    color: var(--text-color);
 }
+
+body.dark-theme header{
+    background-color: var(--header-color);
+    box-shadow: 0 2px 5px rgba(255, 255, 255, 0.1);
+}
+
 body.dark-theme .card{
-    background-color: #131313;
-    color: #E0E0E0;
+    background-color: var(--card-bg);
+    color: var(--primary-text);
 }
+
 body.dark-theme .card .completed{
-    background-color: #A5D6A7;
-    color: #131313 ;
+    background-color: var(--border-color);
+    color: var(--bg-color) ;
 }
+
 body.dark-theme .goal{
-    background-color: #1e1e1e;
+    background-color: var(--card-bg);
+    border-color: var(--border-color);
 }
 
 body.dark-theme button{
-    background-color: #4CAF50;
+    background-color: var(--secondary-accent);
 }
 
 body.dark-theme button:hover{
-    background-color: #81C784;
+    background-color: var(--secondary-accent-hover);
 }
 
 body.dark-theme .delete-card{
-     background-color: #ff4d4d;
+     background-color: var(--error-color);
+     color: var(--text-color);
 }
 
 body.dark-theme .delete-card:hover{
-     background-color: #ff1a1a;
+     background-color: var(--warning-color);
 }
 
 /* Медіа запити */
 @media (max-width: 480px){
+    header{
+        padding: 0 3rem;
+    }
+    header h1{
+        margin: 1rem 0;
+    }
     .goal{
         max-width: 100%;
     }
-    header h1{
+    .burger {
+        display: flex;
+        background-color: none;
+    }
+    body.dark-theme .burger{
+        background-color: rgba(0, 0, 0, 0);
+    }
+    body.dark-theme .burger:hover{
+        background-color: rgba(0, 0, 0, 0);
+    }
+    body.dark-them .burger.active{
+        background-color: var(--error-color);
+    }
+    .nav{
+        position: absolute;
         display: none;
+        top: 100px;
+        right: 0;
+        width: 100%;
+        height: calc(100% - 100px);
+        padding: 100px 0;
+        border: 2px solid var(--border-color);
+        flex-direction: column;
+        align-items: center;
+        justify-content: start;
+        transition: opacity 0.3s ease, transform 0.3s ease;
+        background-color: var(--bg-color);
+        z-index: 10;
+        opacity: 0;
+    }
+
+    .nav.open{
+        transform: translateY(0);
+        opacity: 1;
+        display: flex;
+    }
+
+    .burger.active{
+        background-color: var(--error-color);
+    }
+
+    .burger.active .burger-line:nth-child(1){
+        transform: rotate(45deg) translate(5px, 5px);
+    }
+
+    .burger.active .burger-line:nth-child(2){
+        opacity: 0;
+    }
+
+    .burger.active .burger-line:nth-child(3){
+        transform: rotate(-45deg) translate(5px, -5px);
     }
 }
 .goal span {
@@ -301,3 +447,4 @@ body.dark-theme .delete-card:hover{
     cursor: grabbing;
     opacity: 0.9;
 }
+

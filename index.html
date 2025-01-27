@@ -13,17 +13,24 @@
 </head>
 <body id="body">
     <header>
-        <h1>StepUp: Управління завданнями</h1>
-        <div id="boardControls">
-          <input type="date" id="datePicker" />
-          <button id="addCardButton">Додати картку</button>
-        </div>
-        <div class="theme-toggle-container">
-            <label class="theme-toggle">
-                <input type="checkbox" id="themeToggle">
-                <span class="slider"></span>
-            </label>
-        </div>
+        <button class="burger" aria-label="Відкрити меню">
+          <span class="burger-line"> </span>
+          <span class="burger-line"> </span>
+          <span class="burger-line"> </span>
+        </button>
+        <h1>StepUp</h1>
+        <nav class="nav">
+          <div id="boardControls">
+            <input type="date" id="datePicker" />
+            <button id="addCardButton">Додати картку</button>
+          </div>
+          <div class="theme-toggle-container">
+              <label class="theme-toggle">
+                  <input type="checkbox" id="themeToggle">
+                  <span class="slider"></span>
+              </label>
+          </div>
+        </nav>
     </header>
     
     <main id="boardsContainer"></main>

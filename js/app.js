@@ -19,8 +19,33 @@ function updateSelectedDate() {
 
 document.getElementById("datePicker").addEventListener("change", updateSelectedDate);
 
+function burgerMenu(){
+    const burgerButton = document.querySelector('.burger');
+    const nav = document.querySelector('.nav');
+    const progressBar = document.getElementById("progress-section");
+    const pageWidth = document.documentElement.scrollWidth;
 
+    if(pageWidth <= '480'){
+        progressBar.style.display = 'none';
+    }
 
+    // Функція для відкриття/закриття меню
+    burgerButton.addEventListener('click', () => {
+        progressBar.style.display = "block";
+        progressBar.style.width = '100%';
+        nav.appendChild(progressBar);
+        nav.classList.toggle('open'); // Додаємо/видаляємо клас "open"
+        burgerButton.classList.toggle('active'); // Змінюємо вигляд бургер-кнопки
+    });
+
+    // Закриття меню при натисканні поза ним
+    document.addEventListener('click', (e) => {
+      if (!nav.contains(e.target) && !burgerButton.contains(e.target)) {
+        nav.classList.remove('open');
+        burgerButton.classList.remove('active');
+      }
+    });
+}
 
 // Додавання нової картки
 function addCardToDate() {
@@ -36,9 +61,9 @@ function addCardToDate() {
     }
 }
 
-document.getElementById("addCardButton").addEventListener("click", () => {
-    addCardToDate();
-    updateChart();
+    document.getElementById("addCardButton").addEventListener("click", () => {
+        addCardToDate();
+        updateChart();
 });
 
 // Додавання цілі в картку
@@ -217,8 +242,6 @@ function renderCards() {
                    });
                 completeDiv.appendChild(completeButton);
                 goalDiv.appendChild(completeDiv);    
-            }
-            if(!goal.completed){
                 const remindButton = document.createElement('button');
                 remindButton.textContent = 'Нагадати';
                 remindButton.addEventListener('click', () => {
@@ -241,6 +264,7 @@ function renderCards() {
 renderCards();
 updateSelectedDate();
 darkMode();
+burgerMenu();
 
 
 function getLastWeekDates() {
