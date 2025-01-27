@@ -255,9 +255,8 @@ function renderCards() {
                    });
                 completeDiv.appendChild(completeButton);
                 goalDiv.appendChild(completeDiv);
-                if(!("Notification" in window) && localStorage.getItem('notification')) {
+                if(!("Notification" in window)) {
                     alert("Ваш браузер не підтримує сповіщення.");
-                    localStorage.setItem("notification", true);
                 }else if(Notification.permission !== "granted") {
                     // Запитати дозвіл на відправку повідомлень
                     Notification.requestPermission().then((permission) => {
