@@ -245,7 +245,7 @@ function renderCards() {
                 const remindButton = document.createElement('button');
                 remindButton.textContent = 'Нагадати';
                 remindButton.addEventListener('click', () => {
-                    sendNotification(goalText);
+                    sendNotification(goal.text);
                 });
                 completeDiv.appendChild(remindButton); 
             }
